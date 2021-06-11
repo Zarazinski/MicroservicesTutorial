@@ -1,4 +1,4 @@
-import UsersService from "#root/adapters/UsersService";
+import UsersService from "../../../adapters/UsersService";
 
 const createUserSessionResolver = async (obj, { email, password }, context) => {
     const userSession = await UsersService.createUserSession({ email, password });

@@ -1,8 +1,13 @@
+import "@babel/polyfill";
 import React from "react";
+import { ApolloProvider } from "react-apollo";
 import { render } from "react-dom";
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 
+import graphqlClient from "#root/api/graphqlClient";
 import Root from "#root/components/Root";
+
+import * as theme from "./theme";
 
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
@@ -17,11 +22,13 @@ const GlobalStyle = createGlobalStyle`
     body {
         font-family: Open Sans, sans-serif;
     }
-`
+`;
 
 render(
-    <>
-        <GlobalStyle />
-        <Root />
-    </>,
+    <ApolloProvider client={graphqlClient}>
+        <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Root />
+        </ThemeProvider>
+    </ApolloProvider>,
     document.getElementById("app"));
