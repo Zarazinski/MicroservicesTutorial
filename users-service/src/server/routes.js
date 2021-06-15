@@ -3,6 +3,7 @@ import generateUUID from "#root/helpers/generateUUID";
 import hashPassword from "#root/helpers/hashPassword";
 import { addHours } from "date-fns";
 import passwordCompareSync from "#root/helpers/passwordCompareSync";
+import userSessionResolver from "../../../api-gateway/src/graphql/resolvers/Query/userSession";
 
 const USER_SESSION_EXPIRY_HOURS = 1;
 
@@ -38,6 +39,20 @@ const setupRoutes = app => {
             return res.json(userSession);
         } catch (e) {
             return next(e);
+        }
+    });
+
+    app.delete("/sessions/:sessionId", async (req, res, next) => {
+        try {
+            const userSession = await UserSession.findByPk(req.params.sessionId);
+
+            if (!userSession) return next(new Error("Invalid session id"));
+
+            await userSession.destroy();
+
+            return res.end();
+        } catch (e) {
+
         }
     });
 
